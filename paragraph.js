@@ -3,19 +3,25 @@ if (process.argv.length < 3) {
 	process.exit(1);
 };
 
-const util = require('util');
 var fs = require("fs"), folder = process.argv[2];
 if (!fs.existsSync(folder)) {
 	console.log('FOLDER_PATH is invalid!');
 	process.exit(1);
 }
 
+var total = 0;
 fs.readdirSync(folder).forEach(file => {
+	total++;
+});
+var pace = require('pace')(total);
+const util = require('util');
+
+fs.readdirSync(folder).forEach(file => {
+	pace.op();
 	var filePath = util.format('%s/%s', folder, file);
 	var arr = file.split(".");
 	fs.readFile(filePath, 'utf-8', function(err, buff) {
 		if (err) throw err;
-		console.log('Read file OK: ' + file);
 		var outputFolder = "./output_folder";
 		if (!fs.existsSync(outputFolder)) {
 			fs.mkdirSync(outputFolder);
@@ -28,8 +34,7 @@ fs.readdirSync(folder).forEach(file => {
 				fs.writeFile(fileName, buffStr, function(err, buffStr) {
 					if (err) console.log(err);
 				});
-				console.log("Write file:", fileName, i);
-				i++;
+				i++; 
 			}
 		});
 	});
