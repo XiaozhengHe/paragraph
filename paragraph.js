@@ -40,7 +40,7 @@ function isEndSymbol(ch) {
 
 function isEndColon(ch) {
 	return ch == ":" ||
-			ch == "："
+           ch == "："
 }
 
 fs.readdirSync(folder).forEach(file => {
@@ -65,7 +65,7 @@ fs.readdirSync(folder).forEach(file => {
 					continue;
 				}
 				if (buffStr.length < minwords) {  //段落字数小于20,与下一段连接在一起
-					buffTem = buffStr;
+					buffTem = buffTem+buffStr;
 					continue;
 				}
 				else if (isEndSymbol(buffStr[buffStr.length - 1])) {    // 结尾是标点符号，视作完整的一段
@@ -78,6 +78,13 @@ fs.readdirSync(folder).forEach(file => {
 				else if (isEndColon(buffStr[buffStr.length - 1])) {  //结尾是冒号的情况，与下一段连接在一起
 					buffTem = buffStr;
 					continue;
+				}
+				else {
+					var fileName = util.format("%s/%s_%d.%s", outputFolder, arr[0], i, arr[1]);
+					fs.writeFile(fileName, buffStr, function(err, buffStr) {
+						if (err) console.log(err);
+					});
+					i++;
 				}
 				buffTem = "";
 			}
