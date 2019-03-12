@@ -9,7 +9,7 @@ if (!fs.existsSync(folder)) {
 	process.exit(1);
 }
 
-var minwords = 20;  //最小字数
+var minwords = 20;  //每一段最小字数
 
 var total = 0;
 fs.readdirSync(folder).forEach(file => {
